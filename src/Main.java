@@ -5,23 +5,40 @@ public class Main {
     public static void main(String[] args) {
         MyApp app = new MyApp();
         app.setSize(new Dimension(300, 300));
-        app.setTitle("Java AWT");
+        app.setTitle("Menu Bars");
         app.setVisible(true);
     }
 }
 
 class MyApp extends Frame {
-    private int count = 0;
-
     MyApp() {
         setLayout(new FlowLayout());
 
-        Button button = new Button("Click");
-        button.addActionListener((e) -> {
-            count++;
-            repaint();
-        });
-        add(button);
+        MenuBar menuBar = new MenuBar();
+
+        Menu section1 = new Menu("File");
+        MenuItem open = new MenuItem("Open");
+        open.setEnabled(false);
+        MenuItem save = new MenuItem("Save");
+        MenuItem close = new MenuItem("Close");
+
+        section1.add(open).addActionListener(e -> System.out.println("Opening"));
+        section1.add(new MenuItem("-"));
+        section1.add(save).addActionListener(e -> System.out.println("Saving"));
+        section1.add(new MenuItem(""));
+        section1.add(close).addActionListener(e -> System.exit(0));
+
+        Menu section2 = new Menu("Options");
+        MenuItem graphics = new MenuItem("Graphics");
+        CheckboxMenuItem oc = new CheckboxMenuItem("Occlusion Culling", true);
+
+        section2.add(graphics);
+        section2.add(oc);
+
+        menuBar.add(section1);
+        menuBar.add(section2);
+
+        setMenuBar(menuBar);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -29,10 +46,5 @@ class MyApp extends Frame {
                 System.exit(0);
             }
         });
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        g.drawString(String.format("You clicked the button %d times", count), 20, 100);
     }
 }
